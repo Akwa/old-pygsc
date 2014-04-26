@@ -33,6 +33,7 @@ pointers = {
                         'palettes': 0xa8d6,
                         'names': 0x53384,
                         'movenames': 0x1c9f29,
+                        'movenames_end': 0x1ca896,
                         'tms': 0x1167a,
                         }
             }

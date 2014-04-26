@@ -40,37 +40,58 @@ class Rom:
 
         """Pokémon names data index bounds"""
         names_start = pnt['names']
-        names_end = names_start + c.max_pokemon * c.name_size
+        names_end = pnt.get(
+            'names_end',
+            names_start + c.max_pokemon * c.name_size
+            )
         self.pnt_names = (names_start, names_end)
 
         """Pokémon base stats index bounds"""
         basestats_start = pnt['basestats']
-        basestats_end = basestats_start + c.max_pokemon * c.basestat_size
+        basestats_end = pnt.get(
+            'basestats_end',
+            basestats_start + c.max_pokemon * c.basestat_size
+            )
         self.pnt_basestats = (basestats_start, basestats_end)
 
         """Pokémon palettes data index bounds"""
         palettes_start = pnt['palettes']
-        palettes_end = palettes_start + c.max_pokemon * c.palette_size
+        palettes_end = pnt.get(
+            'palettes_end',
+            palettes_start + c.max_pokemon * c.palette_size
+            )
         self.pnt_palettes = (palettes_start, palettes_end)
 
         """Evolution and moveset data index bounds"""
         evomoves_start = pnt['evomoves']
-        evomoves_end = pnt.get('evomoves_end', bank_end(evomoves_start))
+        evomoves_end = pnt.get(
+            'evomoves_end',
+            bank_end(evomoves_start)
+            )
         self.pnt_evomoves = (evomoves_start, evomoves_end)
 
         """Moves' names data index bounds"""
         movenames_start = pnt['movenames']
-        movenames_end = movenames_start + c.max_moves * c.movename_size
+        movenames_end = pnt.get(
+            'movenames_end',
+            movenames_start + c.max_moves * c.movename_size
+            )
         self.pnt_movenames = (movenames_start, movenames_end)
 
         """Moves' stats data index bounds"""
         moves_start = pnt['moves']
-        moves_end = moves_start + c.max_moves * c.move_size
+        moves_end = pnt.get(
+            'moves_end',
+            moves_start + c.max_moves * c.move_size
+            )
         self.pnt_moves = (moves_start, moves_end)
 
         """TM to move mapping index bounds"""
         tms_start = pnt['tms']
-        tms_end = tms_start + c.max_tms * c.tm_size
+        tms_end = pnt.get(
+            'tms_end',
+            tms_start + c.max_tms * c.tm_size
+            )
         self.pnt_tms = (tms_start, tms_end)
 
     def load_data(self):
@@ -93,9 +114,11 @@ class Rom:
 
         self.moves = Move_Container()
         mv = self.moves
-        mv.extract_movenames(self.data_movenames)
+        mv.extract_movenames(self.data_movenames, *self.pnt_movenames)
         mv.extract_moves(self.data_moves)
         mv.extract_tms(self.data_tms)
+
+        self.save_data()
 
     def update_data(self):
         pk, mv = self.pokemon, self.moves

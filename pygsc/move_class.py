@@ -13,11 +13,9 @@ class Move_Container:
         self.tm_data = []
         self.name_map = {}
 
-    def extract_movenames(self, data):
+    def extract_movenames(self, data, start, end):
+        self.movenames_maxsize = end - start
         for i, name in enumerate(mf.read_movenames(data)):
-            if i == 251:
-                self.name_leftovers = name
-                break
             self.moves[i].name = name
             self.name_map[name] = i
 
@@ -30,7 +28,7 @@ class Move_Container:
 
     def assembly_movenames(self):
         movenames = b'\x50'.join(mf.rev_movenames(self.moves))
-        return b''.join((movenames, self.name_leftovers))
+        return movenames.ljust(self.movenames_maxsize, b'\x00')
 
     def assembly_moves(self):
         return b''.join(mf.rev_moves(self.moves))

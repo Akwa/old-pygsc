@@ -15,7 +15,6 @@ def read_movenames(data_movenames):
         yield ''.join(name_chars)
         i += 1
         m += 1
-    yield data_movenames[m:]
 
 def read_moves(data_moves):
     for i in range(0, c.move_size*c.max_moves, c.move_size):
