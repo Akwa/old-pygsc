@@ -19,7 +19,7 @@ def differences_in_two_roms(path1, path2):
 
     for n, (i, j) in enumerate(zip(data1, data2)):
         if i != j:
-            print('n %s,   %s != %s' % (n, i, j))
+            #print('n %s,   %s != %s' % (n, i, j))
             total += 1
     print('total differences: %s' % (total))
 

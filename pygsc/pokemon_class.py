@@ -15,6 +15,18 @@ class Pokemon_Container:
         self.pokemon = {i: Pokemon() for i in range(c.max_pokemon)}
         self.name_map = {}
 
+    def __getitem__(self, item):
+        """
+        Allows to return self.pokemon items directly by self[item].
+        You can get to any Pokemon data by its (id - 1) or name.
+        Eg. self[0] will do the same as self['BULBASAUR'].
+        """
+        if type(item) is int:
+            return self.pokemon[item]
+        elif type(item) is str:
+            return self.pokemon[self.name_map[item]]
+        return None
+
     def extract_names(self, data):
         for i, name in enumerate(pf.read_name(data)):
             self.pokemon[i].name = name

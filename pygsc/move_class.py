@@ -13,6 +13,18 @@ class Move_Container:
         self.tm_data = []
         self.name_map = {}
 
+    def __getitem__(self, item):
+        """
+        Allows to return self.pokemon items directly by self[item].
+        You can get to any Move data by its id or name.
+        Eg. self[0] will do the same as self['POUND'].
+        """
+        if type(item) is int:
+            return self.moves[item]
+        elif type(item) is str:
+            return self.moves[self.name_map[item]]
+        return None
+
     def extract_movenames(self, data, start, end):
         self.movenames_maxsize = end - start
         for i, name in enumerate(mf.read_movenames(data)):
