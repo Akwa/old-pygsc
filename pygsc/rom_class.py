@@ -104,7 +104,7 @@ class Rom:
         self.data_palettes = pk.assembly_palettes()
         self.data_evomoves = pk.assembly_evomoves(*self.pnt_evomoves)
 
-        self.data_movename s= mv.assembly_movenames()
+        self.data_movenames = mv.assembly_movenames()
         self.data_moves = mv.assembly_moves()
         self.data_tms = mv.assembly_tms()
 
