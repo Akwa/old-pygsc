@@ -23,12 +23,6 @@ ver_end = 0x13e
 
 evodata_len = {0x01: 3, 0x02: 3, 0x03: 3, 0x04: 3, 0x05: 4}
 
-versions = {
-            b'POKEMON_GL': 'Gold',
-            b'POKEMON_SL': 'Silver',
-            b'PM_CRYSTAL': 'Crystal'
-            }
-
 alph = {
 0x50: "@",
 0x54: "#",
@@ -112,3 +106,5 @@ alph = {
 0xfe: "8",
 0xff: "9",
 }
+
+rev_alph = {v: k for k, v in alph.items()}

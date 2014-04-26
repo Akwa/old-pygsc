@@ -1,6 +1,12 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+versions = {
+            b'POKEMON_GL': 'Gold',
+            b'POKEMON_SL': 'Silver',
+            b'PM_CRYSTAL': 'Crystal'
+            }
+
 pointers = {
             'Gold': {
                      'evomoves': 0x427bd,

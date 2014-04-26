@@ -22,15 +22,26 @@ class Pokemon_Container:
 
     def extract_basestats(self, data):
         for i, basestats in enumerate(pf.read_basestats(data)):
-            self.pokemon[i].basestats = basestats
+            self.pokemon[i].__dict__.update(basestats)
 
     def extract_palettes(self, data):
         for i, palettes in enumerate(pf.read_palettes(data)):
             self.pokemon[i].palettes = palettes
 
     def extract_evomoves(self, data):
-        pos = c.bank_size - len(data)
-        for i, (evos, moves) in enumerate(pf.read_evomoves(data, pos)):
+        for i, (evos, moves) in enumerate(pf.read_evomoves(data)):
             self.pokemon[i].evos = evos
             self.pokemon[i].moves = moves
         pf.process_evos(self.pokemon)
+
+    def assembly_names(self):
+        return b''.join(pf.rev_names(self.pokemon))
+
+    def assembly_basestats(self):
+        return b''.join(pf.rev_basestats(self.pokemon))
+
+    def assembly_palettes(self):
+        return b''.join(pf.rev_palettes(self.pokemon))
+
+    def assembly_evomoves(self, start, end):
+        return pf.rev_evomoves(self.pokemon, start, end)
