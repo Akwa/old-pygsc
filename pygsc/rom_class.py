@@ -118,8 +118,6 @@ class Rom:
         mv.extract_moves(self.data_moves)
         mv.extract_tms(self.data_tms)
 
-        self.save_data()
-
     def update_data(self):
         pk, mv = self.pokemon, self.moves
         self.data_names = pk.assembly_names()
