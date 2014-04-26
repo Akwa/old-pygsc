@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
-import constants as c
-import pokemon_functions as pf
+from pygsc import constants as c
+from pygsc import pokemon_functions as pf
 
 class Pokemon:
 

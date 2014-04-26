@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
-import constants as c
+from pygsc import constants as c
 
 def read_movenames(data_movenames):
     i, m = 0, 0

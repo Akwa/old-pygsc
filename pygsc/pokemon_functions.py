@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
-import constants as c
+from pygsc import constants as c
 from struct import pack, unpack
 
 def read_name(data_names):

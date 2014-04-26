@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
-import diff_roms
-import pygsc
+from pygsc import rom_class
+from pygsc.test import diff_roms
 
 """
 We want to check if the tool is stable.
@@ -11,14 +11,9 @@ Then, we will save changes and check differences between base and changed rom.
 The differences between roms should happen in exact spots and their amount
 should be small.
 """
-if __name__ == '__main__':
 
-    """ Initialize our Rom class """
-    if len(sys.argv) > 1:
-        if len(sys.argv) == 2:
-            sys.argv.append('test1.gbc')
-        Data = pygsc.Rom(sys.argv[1], sys.argv[2])
-
+def test_1(path1, path2):
+    Data = rom_class.Rom(path1, path2)
 
     """
     No getter/setter functions yet, so basic assignment operators are used.
@@ -48,4 +43,14 @@ if __name__ == '__main__':
     2621 for G/S
     2632 for C
     """
-    diff_roms.differences_in_two_roms(sys.argv[1], sys.argv[2])
+    diff_roms.differences(path1, path2)
+    print('Proper amount for original silver/gold: %s' % (2621))
+    print('Proper amount for original crystal: %s' % (2632))
+
+if __name__ == '__main__':
+
+    """ Initialize our Rom class """
+    if len(sys.argv) > 1:
+        if len(sys.argv) == 2:
+            sys.argv.append('test1.gbc')
+        test_1(sys.argv[1], sys.argv[2])

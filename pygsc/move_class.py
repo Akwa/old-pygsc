@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
-import constants as c
-import move_functions as mf
+from pygsc import constants as c
+from pygsc import move_functions as mf
 
 class Move:
     pass

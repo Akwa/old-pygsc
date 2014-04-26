@@ -1,10 +1,10 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
-import constants as c
-from helping_functions import bank_end
-from move_class import Move_Container, Move
-from pointer_data import versions, pointers
-from pokemon_class import Pokemon_Container, Pokemon
+from pygsc import constants as c
+from pygsc import helping_functions as hf
+from pygsc import move_class as m
+from pygsc import pointer_data as pd
+from pygsc import pokemon_class as p
 from re import match
 
 class Rom:
@@ -33,10 +33,10 @@ class Rom:
 
     def read_version(self):
         version = self.data[c.ver_start:c.ver_end]
-        self.version = versions.get(version, 'Custom')
+        self.version = pd.versions.get(version, 'Custom')
 
     def set_pointers(self):
-        pnt = pointers[self.version]
+        pnt = pd.pointers[self.version]
 
         """Pokémon names data index bounds"""
         names_start = pnt['names']
@@ -66,7 +66,7 @@ class Rom:
         evomoves_start = pnt['evomoves']
         evomoves_end = pnt.get(
             'evomoves_end',
-            bank_end(evomoves_start)
+            hf.bank_end(evomoves_start)
             )
         self.pnt_evomoves = (evomoves_start, evomoves_end)
 
@@ -105,14 +105,14 @@ class Rom:
         self.data_tms = data[slice(*self.pnt_tms)]
 
     def create_classes(self):
-        self.pokemon = Pokemon_Container()
+        self.pokemon = p.Pokemon_Container()
         pk = self.pokemon
         pk.extract_names(self.data_names)
         pk.extract_basestats(self.data_basestats)
         pk.extract_palettes(self.data_palettes)
         pk.extract_evomoves(self.data_evomoves)
 
-        self.moves = Move_Container()
+        self.moves = m.Move_Container()
         mv = self.moves
         mv.extract_movenames(self.data_movenames, *self.pnt_movenames)
         mv.extract_moves(self.data_moves)

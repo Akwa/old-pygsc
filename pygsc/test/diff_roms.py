@@ -3,7 +3,7 @@
 import sys
 
 
-def differences_in_two_roms(path1, path2):
+def differences(path1, path2, show_differences=False):
     """
     Pass two .gbc files as arguments. Function will check, byte by byte,
     if two roms have the same data in same offsets. In case of difference,
@@ -19,9 +19,10 @@ def differences_in_two_roms(path1, path2):
 
     for n, (i, j) in enumerate(zip(data1, data2)):
         if i != j:
-            #print('n %s,   %s != %s' % (n, i, j))
+            if show_differences:
+                print('n %s,   %s != %s' % (n, i, j))
             total += 1
-    print('total differences: %s' % (total))
+    print('Total differences: %s' % (total))
 
 if __name__ == '__main__':
     """
@@ -29,4 +30,4 @@ if __name__ == '__main__':
     $ python3 diff_roms.py ***.gbc ***.gbc
     """
     if len(sys.argv) > 2:
-        differences_in_two_roms(sys.argv[1], sys.argv[2])
+        differences(sys.argv[1], sys.argv[2])
