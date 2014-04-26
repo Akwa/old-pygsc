@@ -41,6 +41,7 @@ class Pokemon_Container:
             self.pokemon[i].palettes = palettes
 
     def extract_evomoves(self, data):
+        self.evomoves_maxsize = len(data) - c.max_pokemon * c.pointer_size
         for i, (evos, moves) in enumerate(pf.read_evomoves(data)):
             self.pokemon[i].evos = evos
             self.pokemon[i].moves = moves

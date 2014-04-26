@@ -25,8 +25,8 @@ class Move_Container:
             return self.moves[self.name_map[item]]
         return None
 
-    def extract_movenames(self, data, start, end):
-        self.movenames_maxsize = end - start
+    def extract_movenames(self, data):
+        self.movenames_maxsize = len(data)
         for i, name in enumerate(mf.read_movenames(data)):
             self.moves[i].name = name
             self.name_map[name] = i
