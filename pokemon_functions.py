@@ -86,7 +86,7 @@ def read_eggmoves(data_eggmoves, start):
         pointer = pointer - c.bank_size - position
         eggmoves = []
         while data_eggmoves[pointer] != 0xff:
-            eggmovs.append(data_eggmoves[pointer])
+            eggmoves.append(data_eggmoves[pointer])
             pointer += 1
         eggmoves = set(eggmoves)
         yield eggmoves
