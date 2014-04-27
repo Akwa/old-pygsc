@@ -235,6 +235,6 @@ def pack_evomoves(evos, moves):
 
 def pack_eggmoves(eggmoves):
     data = bytes(eggmoves)
-    data.append(b'\xff')
+    data = b''.join((data, b'\xff'))
     len_data = len(data)
     return b''.join(data), len_data
