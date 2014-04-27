@@ -56,7 +56,8 @@ def read_palettes(data_palettes):
             palettes.append([R, G, B])
         yield palettes
 
-def read_evomoves(data_evomoves, position):
+def read_evomoves(data_evomoves, start):
+    position = start % c.bank_size
     for i in range(c.max_pokemon):
         j = i * c.pointer_size
         byte_seq = data_evomoves[j:j + c.pointer_size]
@@ -76,15 +77,15 @@ def read_evomoves(data_evomoves, position):
             pointer += 2
         yield evos, moves
 
-def read_eggmoves(data_evomoves, position):
+def read_eggmoves(data_eggmoves, position):
     for i in range(c.max_pokemon):
         j = i * c.pointer_size
         byte_seq = data_eggmoves[j:j + c.pointer_size]
         pointer = unpack('<H', byte_seq)[0]
         pointer = pointer - c.bank_size - position
         eggmoves = [], []
-        while data_evomoves[pointer] != 0xff:
-            entry = list(data_evomoves[pointer:pointer + c.entry_size])
+        while data_eggmoves[pointer] != 0xff:
+            entry = list(data_eggmoves[pointer:pointer + c.entry_size])
             eggmoves.append(entry)
             pointer += 2
         yield eggmoves
