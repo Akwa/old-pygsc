@@ -56,8 +56,7 @@ def read_palettes(data_palettes):
             palettes.append([R, G, B])
         yield palettes
 
-def read_evomoves(data_evomoves):
-    position = c.bank_size - len(data_evomoves)
+def read_evomoves(data_evomoves, position):
     for i in range(c.max_pokemon):
         j = i * c.pointer_size
         byte_seq = data_evomoves[j:j + c.pointer_size]
@@ -76,6 +75,19 @@ def read_evomoves(data_evomoves):
             moves.append(entry)
             pointer += 2
         yield evos, moves
+
+def read_eggmoves(data_evomoves, position):
+    for i in range(c.max_pokemon):
+        j = i * c.pointer_size
+        byte_seq = data_eggmoves[j:j + c.pointer_size]
+        pointer = unpack('<H', byte_seq)[0]
+        pointer = pointer - c.bank_size - position
+        eggmoves = [], []
+        while data_evomoves[pointer] != 0xff:
+            entry = list(data_evomoves[pointer:pointer + c.entry_size])
+            eggmoves.append(entry)
+            pointer += 2
+        yield eggmoves
 
 def process_evos(pokemon):
     for i in range(c.max_pokemon):
@@ -175,17 +187,30 @@ def rev_evomoves(pokemon, start, end):
     data = data.ljust(total_length, b'\x00')
     return data
 
-def pack_evomoves(evos, moves):
+def rev_eggmoves(pokemon, start, end):
+    total_length = end - start
+    data, eggmoves = [], []
+    i_data = start % c.bank_size + c.max_pokemon * c.pointer_size
+    for i in range(c.max_pokemon):
+        pk = pokemon[i]
+
+        pointer = pack('<H', i_data + c.bank_size)
+        data.append(pointer)
+
+        packed_eggmoves, len_eggmoves = pack_eggmoves(pk.eggmoves)
+        i_data += len_eggmoves
+        eggmoves.append(packed_eggmoves)
+    data.extend(eggmoves)
+    data = b''.join(data)
+    data = data.ljust(total_length, b'\x00')
+    return data
+
+def pack_eggmoves(eggmoves):
     data = []
     len_data = 0
-    for evo in evos:
-        evo[-1] += 1  # 0-indexing -> 1-indexing Pokemon
-        data.append(bytes(evo))
-        len_data += len(evo)
-    data.append(b'\x00')
-    for move in moves:
-        data.append(bytes(move))
+    for eggmove in eggmoves:
+        data.append(bytes(eggmove))
         len_data += c.entry_size
-    data.append(b'\x00')
+    data.append(b'\xff')
     len_data += c.entry_size
     return b''.join(data), len_data

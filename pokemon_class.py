@@ -40,12 +40,17 @@ class Pokemon_Container:
         for i, palettes in enumerate(pf.read_palettes(data)):
             self.pokemon[i].palettes = palettes
 
-    def extract_evomoves(self, data):
-        self.evomoves_maxsize = len(data) - c.max_pokemon * c.pointer_size
-        for i, (evos, moves) in enumerate(pf.read_evomoves(data)):
+    def extract_evomoves(self, data, start, end):
+        self.evomoves_maxsize = end - start - c.max_pokemon * c.pointer_size
+        for i, (evos, moves) in enumerate(pf.read_evomoves(data, start)):
             self.pokemon[i].evos = evos
             self.pokemon[i].moves = moves
         pf.process_evos(self.pokemon)
+
+    def extract_eggmoves(self, data, start, end):
+        self.eggmoves_maxsize = end - start - c.max_pokemon * c.pointer_size
+        for i, (eggmoves) in enumerate(pf.read_eggmoves(data, start)):
+            self.pokemon[i].eggmoves = eggmoves
 
     def assembly_names(self):
         return b''.join(pf.rev_names(self.pokemon))
@@ -58,3 +63,6 @@ class Pokemon_Container:
 
     def assembly_evomoves(self, start, end):
         return pf.rev_evomoves(self.pokemon, start, end)
+
+    def assembly_eggmoves(self, start, end):
+        return pf.rev_eggmoves(self.pokemon, start, end)

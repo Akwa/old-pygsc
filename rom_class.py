@@ -61,6 +61,14 @@ class Rom:
             )
         self.pnt_evomoves = (evomoves_start, evomoves_end)
 
+        """Egg moves data index bounds"""
+        eggmoves_start = pnt['eggmoves']
+        eggmoves_end = pnt.get(
+            'eggmoves_end',
+            hf.bank_end(eggmoves_start)
+            )
+        self.pnt_eggmoves = (eggmoves_start, eggmoves_end)
+
         """Moves' names data index bounds"""
         movenames_start = pnt['movenames']
         movenames_end = pnt.get(
@@ -88,6 +96,7 @@ class Rom:
         self.data_basestats = data[slice(*self.pnt_basestats)]
         self.data_palettes = data[slice(*self.pnt_palettes)]
         self.data_evomoves = data[slice(*self.pnt_evomoves)]
+        self.data_eggmoves = data[slice(*self.pnt_eggmoves)]
         self.data_movenames = data[slice(*self.pnt_movenames)]
         self.data_moves = data[slice(*self.pnt_moves)]
         self.data_tms = data[slice(*self.pnt_tms)]
@@ -98,7 +107,8 @@ class Rom:
         pk.extract_names(self.data_names)
         pk.extract_basestats(self.data_basestats)
         pk.extract_palettes(self.data_palettes)
-        pk.extract_evomoves(self.data_evomoves)
+        pk.extract_evomoves(self.data_evomoves, *self.pnt_evomoves)
+        pk.extract_eggmoves(self.data_eggmoves, *self.pnt_eggmoves)
 
         self.moves = m.Move_Container()
         mv = self.moves
@@ -112,6 +122,7 @@ class Rom:
         self.data_basestats = pk.assembly_basestats()
         self.data_palettes = pk.assembly_palettes()
         self.data_evomoves = pk.assembly_evomoves(*self.pnt_evomoves)
+        self.data_eggmoves = pk.assembly_eggmoves(*self.pnt_eggmoves)
 
         self.data_movenames = mv.assembly_movenames()
         self.data_moves = mv.assembly_moves()
