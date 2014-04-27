@@ -45,7 +45,7 @@ class Pokemon_Container:
         for i, (evos, moves) in enumerate(pf.read_evomoves(data, start)):
             self.pokemon[i].evos = evos
             self.pokemon[i].moves = moves
-        pf.process_evos(self.pokemon)
+        self.primary_pokemon = pf.process_evos(self.pokemon)
 
     def extract_eggmoves(self, data, start, end):
         self.eggmoves_maxsize = end - start - c.max_pokemon * c.pointer_size

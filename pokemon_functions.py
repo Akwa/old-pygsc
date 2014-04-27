@@ -93,30 +93,41 @@ def process_evos(pokemon):
     for i in range(c.max_pokemon):
         for *x, j in pokemon[i].evos:
             pokemon[j].prevolution = i
-    dfs_families(pokemon)
+    return dfs_families(pokemon)
 
 def dfs_families(pokemon):
+    """
+    This function uses stack version of DFS algorithm in order to find
+    length of each evolutionary line, each Pokemon stage in their line
+    and checks if Pokemon is part of a branched family (eg. Slowpoke).
+    """
     dfs_stack = []
     backtrack_stack = []
     for i in range(c.max_pokemon):
         if pokemon[i].prevolution is None:
-            dfs_stack.append((i, 0))
+            dfs_stack.append((i, 0, False))
+    primary_pokemon = [i[0] for i in dfs_stack]
     while dfs_stack:
-        i, stage = dfs_stack.pop()
+        i, stage, branched_family = dfs_stack.pop()
         stage += 1
         pokemon[i].stage = stage
         evos = pokemon[i].evos
-        if evos:
+        if len(evos) > 0:
+            if len(evos) > 1:
+                branched_family = True
             for *x, j in evos:
-                dfs_stack.append((j, stage))
+                dfs_stack.append((j, stage, branched_family))
         else:
-            backtrack_stack.append((i, stage))
+            pokemon[i].branched_family = branched_family
+            backtrack_stack.append((i, stage, branched_family))
     while backtrack_stack:
-        i, stage = backtrack_stack.pop()
+        i, stage, branched_family = backtrack_stack.pop()
         pokemon[i].family_len = stage
+        pokemon[i].branched_family = branched_family
         prevolution = pokemon[i].prevolution
         if prevolution is not None:
-             backtrack_stack.append((prevolution, stage))
+             backtrack_stack.append((prevolution, stage, branched_family))
+    return primary_pokemon
 
 def rev_names(pokemon):
     for i in range(c.max_pokemon):

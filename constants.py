@@ -21,7 +21,20 @@ rom_size = 0x200000
 ver_start = 0x134
 ver_end = 0x13e
 
-evodata_len = {0x01: 3, 0x02: 3, 0x03: 3, 0x04: 3, 0x05: 4}
+evodata_len = {
+0x01: 3,
+0x02: 3,
+0x03: 3,
+0x04: 3,
+0x05: 4
+}
+
+growth_rates = {
+'medium_fast': 0,
+'medium_slow': 3,
+'fast': 4,
+'slow': 5,
+}
 
 alph = {
 0x50: "@",
