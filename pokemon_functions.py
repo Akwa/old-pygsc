@@ -86,9 +86,10 @@ def read_eggmoves(data_eggmoves, start):
         pointer = pointer - c.bank_size - position
         eggmoves = []
         while data_eggmoves[pointer] != 0xff:
-            entry = list(data_eggmoves[pointer:pointer + c.entry_size])
-            eggmoves.append(entry)
-            pointer += 2
+            entry = list(data_eggmoves[pointer])
+            eggmovs.append(entry)
+            pointer += 1
+        eggmoves = set(eggmoves)
         yield eggmoves
 
 def process_evos(pokemon):
@@ -238,7 +239,7 @@ def pack_eggmoves(eggmoves):
     len_data = 0
     for eggmove in eggmoves:
         data.append(bytes(eggmove))
-        len_data += c.entry_size
+        len_data += 1
     data.append(b'\xff')
-    len_data += c.entry_size
+    len_data += 1
     return b''.join(data), len_data
