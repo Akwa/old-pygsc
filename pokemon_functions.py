@@ -84,7 +84,7 @@ def read_eggmoves(data_eggmoves, start):
         byte_seq = data_eggmoves[j:j + c.pointer_size]
         pointer = unpack('<H', byte_seq)[0]
         pointer = pointer - c.bank_size - position
-        eggmoves = [], []
+        eggmoves = []
         while data_eggmoves[pointer] != 0xff:
             entry = list(data_eggmoves[pointer:pointer + c.entry_size])
             eggmoves.append(entry)
