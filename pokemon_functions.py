@@ -218,6 +218,21 @@ def rev_eggmoves(pokemon, start, end):
     data = data.ljust(total_length, b'\x00')
     return data
 
+def pack_evomoves(evos, moves):
+    data = []
+    len_data = 0
+    for evo in evos:
+        evo[-1] += 1  # 0-indexing -> 1-indexing Pokemon
+        data.append(bytes(evo))
+        len_data += len(evo)
+    data.append(b'\x00')
+    for move in moves:
+        data.append(bytes(move))
+        len_data += c.entry_size
+    data.append(b'\x00')
+    len_data += c.entry_size
+    return b''.join(data), len_data
+
 def pack_eggmoves(eggmoves):
     data = []
     len_data = 0
