@@ -77,7 +77,8 @@ def read_evomoves(data_evomoves, start):
             pointer += 2
         yield evos, moves
 
-def read_eggmoves(data_eggmoves, position):
+def read_eggmoves(data_eggmoves, start):
+    position = start % c.bank_size
     for i in range(c.max_pokemon):
         j = i * c.pointer_size
         byte_seq = data_eggmoves[j:j + c.pointer_size]
