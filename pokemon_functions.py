@@ -88,7 +88,10 @@ def read_eggmoves(data_eggmoves, start):
         while data_eggmoves[pointer] != 0xff:
             eggmoves.append(data_eggmoves[pointer])
             pointer += 1
-        eggmoves = set(eggmoves)
+        """
+        making eggmoves a set is disabled by now because it shuffles order
+        """
+        #eggmoves = set(eggmoves)
         yield eggmoves
 
 def process_evos(pokemon):
@@ -207,12 +210,23 @@ def rev_eggmoves(pokemon, start, end):
     for i in range(c.max_pokemon):
         pk = pokemon[i]
 
-        pointer = pack('<H', i_data + c.bank_size)
+        if len(pk.eggmoves) == 0:
+            pointer = -1
+            len_eggmoves = 0
+        else:
+            pointer = pack('<H', i_data + c.bank_size)
+            packed_eggmoves, len_eggmoves = pack_eggmoves(pk.eggmoves)
+            eggmoves.append(packed_eggmoves)
         data.append(pointer)
-
-        packed_eggmoves, len_eggmoves = pack_eggmoves(pk.eggmoves)
         i_data += len_eggmoves
-        eggmoves.append(packed_eggmoves)
+
+    """Assign pointers to 0xFF for all Pokemon without egg moves."""
+    eggmoves.append(b'\xff')
+    end_pointer = pack('<H', i_data + c.bank_size)
+    for i, pointer in enumerate(data):
+        if pointer == -1:
+            data[i] = end_pointer
+
     data.extend(eggmoves)
     data = b''.join(data)
     data = data.ljust(total_length, b'\x00')
@@ -237,4 +251,4 @@ def pack_eggmoves(eggmoves):
     data = bytes(eggmoves)
     data = b''.join((data, b'\xff'))
     len_data = len(data)
-    return b''.join(data), len_data
+    return data, len_data
